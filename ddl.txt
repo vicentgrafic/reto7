@@ -1,0 +1,85 @@
+CREATE TABLE Libro(
+	ClaveLibro INT PRIMARY KEY NOT NULL,
+	ClaveEditorial INT NOT NULL,
+	Titulo CHAR(50) NOT NULL,
+	Idioma CHAR(50) NOT NULL,
+	Formato CHAR(50) NOT NULL,
+	CONSTRAINT fk_ClaveEditorial
+	FOREIGN KEY(ClaveEditorial) 
+	REFERENCES Editorial(ClaveEditorial)
+);
+
+
+CREATE TABLE Editorial(
+   ClaveEditorial INT PRIMARY KEY NOT NULL,
+   Nombre CHAR(50) NOT NULL,
+   Direccion CHAR(50) NOT NULL,
+   Telefono CHAR(50) NOT NULL
+);
+
+CREATE TABLE Tema(
+   ClaveTema INT PRIMARY KEY NOT NULL,
+   Nombre CHAR(50) NOT NULL
+);
+
+CREATE TABLE Autor(
+   ClaveAutor INT PRIMARY KEY NOT NULL,
+   Nombre CHAR(50) NOT NULL
+);
+
+CREATE TABLE Ejemplar(
+	ClaveEjemplar INT PRIMARY KEY NOT NULL,
+	ClaveLibro INT NOT NULL,
+	NumeroOrden CHAR(50) NOT NULL,
+	Edicion CHAR(50) NOT NULL,
+	Ubicacion CHAR(50) NOT NULL,
+	Categoria CHAR(50) NOT NULL,
+	CONSTRAINT fk_ClaveLibro
+	FOREIGN KEY(ClaveLibro) 
+	REFERENCES Libro(ClaveLibro)
+);
+
+CREATE TABLE Socio(
+	ClaveSocio INT PRIMARY KEY NOT NULL,
+	Nombre CHAR(50) NOT NULL,
+	Direccion CHAR(50) NOT NULL,
+	Telefono CHAR(50) NOT NULL,
+	Categoria CHAR(50) NOT NULL
+);
+
+CREATE TABLE Prestamo(
+	ClaveSocio INT NOT NULL,
+	ClaveEjemplar INT NOT NULL,
+	NumeroOrden CHAR(50) NOT NULL,
+	Fecha_prestamo date NOT NULL,
+	Fecha_devolucion date NOT NULL,
+	Notas CHAR(50) NOT NULL,
+	CONSTRAINT fk_ClaveSocio
+	FOREIGN KEY(ClaveSocio) 
+	REFERENCES Socio(ClaveSocio),
+	CONSTRAINT fk_ClaveEjemplar
+	FOREIGN KEY(ClaveEjemplar) 
+	REFERENCES Ejemplar(ClaveEjemplar)
+);
+
+CREATE TABLE Trata_sobre(
+   ClaveLibro INT NOT NULL,
+   ClaveTema INT NOT NULL,
+	CONSTRAINT fk_ClaveLibro
+	FOREIGN KEY(ClaveLibro) 
+	REFERENCES Libro(ClaveLibro),
+	CONSTRAINT fk_ClaveTema
+	FOREIGN KEY(ClaveTema) 
+	REFERENCES Tema(ClaveTema)
+);
+
+CREATE TABLE Escrito_por(
+   ClaveLibro INT NOT NULL,
+   ClaveAutor INT NOT NULL,
+	CONSTRAINT fk_ClaveLibro
+	FOREIGN KEY(ClaveLibro) 
+	REFERENCES Libro(ClaveLibro),
+	CONSTRAINT fk_ClaveAutor
+	FOREIGN KEY(ClaveAutor) 
+	REFERENCES Autor(ClaveAutor)
+);
